@@ -11,4 +11,10 @@ Expected future contents include:
 - agent orchestration configs
 - evaluation and backtesting configs
 
+Current starter configs:
+
+- `tokenizer_tiny.yaml`
+- `model_tiny.yaml`
+- `training_tiny.yaml`
+
 Do not add speculative config files until the corresponding code path exists.

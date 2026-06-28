@@ -1,0 +1,7 @@
+name: training_tiny
+batch_size: 16
+learning_rate: 0.0003
+max_steps: 1000
+eval_interval: 100
+checkpoint_interval: 250
+seed: 42

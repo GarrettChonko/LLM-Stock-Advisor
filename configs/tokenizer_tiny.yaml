@@ -1,0 +1,9 @@
+name: tokenizer_tiny
+vocab_size: 8000
+lowercase: true
+min_frequency: 2
+special_tokens:
+  - "<pad>"
+  - "<bos>"
+  - "<eos>"
+  - "<unk>"
