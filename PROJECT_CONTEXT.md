@@ -50,21 +50,21 @@ Given a stock ticker, the system should:
 
 **Last updated:** 2026-06-27
 
-**Current phase:** Repo setup / project foundation
+**Current phase:** Repo setup / config system
 
 **Current active milestone:** Milestone 0 - Project foundation
 
-**Repository:** Local Git repo initialized in this workspace and the working branch is `feature/project-foundation`. No remote is configured yet, so a real push/PR is still pending.
+**Repository:** Local Git repo initialized in this workspace. Current working branch: `feature/config-system`. No remote is configured yet, so a real push/PR is still pending.
 
 **Main working assumption:** Start with a small from-scratch model to learn the machinery. For the useful stock system, use open-source base models with RAG, tools, and eventually LoRA adapters.
 
-**Current priority:** Build a clean project foundation before training anything large.
+**Current priority:** Build the minimal shared configuration layer before tokenizer or model work begins.
 
 ### Next 3 Tasks
 
-1. Add a Git remote and open the first PR from `feature/project-foundation`.
-2. Add CI to run `pytest` and `ruff` on every pull request.
-3. Create the first concrete config and data README files for Milestone 1.
+1. Add CI to run `pytest` and `ruff` on every pull request.
+2. Build the first dataset/tokenizer pipeline code against the new config loader.
+3. Add config schemas for data processing once the first corpus workflow is defined.
 
 ### Current blockers
 
@@ -715,6 +715,8 @@ Use this section to record important choices so future AI chats do not revisit t
 | YYYY-MM-DD | Use PR-based workflow into protected main | Keep project stable and reviewable | Planned |
 | 2026-06-27 | Start with a minimal Python package skeleton and `ruff` + `pytest` tooling | Establish a clean, boring foundation before implementation | Completed |
 | 2026-06-27 | Initialize Git locally and work from `feature/project-foundation` | Align the workspace with the documented feature-branch workflow | Completed |
+| 2026-06-27 | Use dataclasses plus a small YAML loader for configs | Keep configuration typed and readable without introducing a heavy framework | Completed |
+| 2026-06-27 | Add `PyYAML` as the only new runtime dependency for configs | YAML loading is required and Python has no standard-library YAML parser | Completed |
 
 ---
 
@@ -727,6 +729,7 @@ Use this section to record important choices so future AI chats do not revisit t
 - [x] Add PROJECT_CONTEXT.md
 - [x] Set up Python environment
 - [x] Add basic tests
+- [x] Add initial typed config system
 
 ### Next
 
@@ -836,6 +839,59 @@ Use one short entry per work session.
 
 - No remote repository is configured yet, so a real PR still cannot be opened from this workspace.
 - `ruff` cache writes are blocked in this workspace, so local contributors should use `--no-cache` unless permissions change.
+
+### 2026-06-27 - Config system bootstrap
+
+**Worked on:**
+
+- Added `stock_llm.config` with typed dataclass schemas and YAML loading helpers.
+- Added starter YAML configs for tokenizer, model, and training settings.
+- Added config loader tests for valid, missing, and invalid config cases.
+- Updated README guidance for the new config workflow.
+
+**Decisions made:**
+
+- Use standard-library dataclasses for typed schemas to keep the system simple.
+- Add `PyYAML` as the only new dependency because YAML support is required and not available in the Python standard library.
+- Keep config files flat and explicit for now instead of designing a generic nested config framework early.
+
+**Files changed:**
+
+- `README.md`
+- `pyproject.toml`
+- `PROJECT_CONTEXT.md`
+- `configs/README.md`
+- `configs/tokenizer_tiny.yaml`
+- `configs/model_tiny.yaml`
+- `configs/training_tiny.yaml`
+- `src/stock_llm/config/__init__.py`
+- `src/stock_llm/config/schema.py`
+- `src/stock_llm/config/loader.py`
+- `tests/test_config_loader.py`
+- `tests/fixtures/invalid_model.yaml`
+
+**Commands/tests run:**
+
+- `python -m pip install -e .[dev]`
+- `python -m pytest`
+- `python -m ruff check . --no-cache`
+- `python -m ruff format --check . --no-cache`
+
+**Important decisions:**
+
+- The loader validates field presence, unknown fields, basic scalar types, and schema-level value checks.
+- Config loading supports either names from `configs/` or explicit file paths.
+
+**Known issues:**
+
+- No remote repository is configured yet, so the branch still cannot be pushed or opened as a PR from this workspace alone.
+- `ruff` still needs `--no-cache` in this managed environment.
+
+**Next steps:**
+
+- Add CI so config validation and tests run automatically on PRs.
+- Build the first tokenizer/data pipeline code against `TokenizerConfig`.
+- Decide whether later configs should stay flat or introduce grouped nested sections when the training loop exists.
 
 ---
 

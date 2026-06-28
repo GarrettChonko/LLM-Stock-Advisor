@@ -45,6 +45,21 @@ python -m ruff format . --no-cache
 python -m ruff check . --no-cache
 ```
 
+## Configuration
+
+Example YAML configs live in [configs/README.md](/C:/LLM/configs/README.md) and the concrete starter files in `configs/`.
+The loader in `stock_llm.config` reads YAML into typed dataclass schemas for tokenizer, model, and training settings.
+
+Current usage pattern:
+
+```python
+from stock_llm.config import load_model_config
+
+config = load_model_config("model_tiny.yaml")
+```
+
+Keep configs explicit and small. Add new schema types only when a real implementation needs them.
+
 Suggested workflow:
 
 1. Create a small feature branch.
