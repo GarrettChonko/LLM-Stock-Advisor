@@ -1,0 +1,17 @@
+.env
+.venv
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.tmp/
+tmp/
+pytest-cache-files-*
+*.pyc
+data/raw/
+data/processed/
+checkpoints/
+runs/
+wandb/
+*.pt
+*.pth
+*.safetensors
